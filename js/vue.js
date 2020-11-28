@@ -64,6 +64,15 @@ function isDarkmode(){
     }
 }
 
+
+// Fonction is Keep or Drop
+function isColorKeeped(buttonKeep){
+    if(buttonKeep.textContent === 'Keep Color'){
+        return true;
+    }
+}
+
+
 // Button Dark / White mode
 document.getElementById('toogle_b_w').addEventListener('click', function(){
     this.textContent = isDarkmode() ? 'Light mode' : 'Dark mode';
@@ -90,12 +99,9 @@ buttonRandomColor.addEventListener('click', function(){
 document.querySelectorAll('.fix_color').forEach(item => {
     item.addEventListener('click', function(){
         //change texte du bouton + before/after
-        this.textContent =
-            this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
-        this.previousElementSibling.style.transform = 
-            this.textContent === 'Keep Color' ? 'translateX(0px)' : 'translateX(10px)';
-        this.nextElementSibling.style.transform =
-            this.textContent === 'Keep Color' ? 'translateX(0px)' : 'translateX(-10px)';
+        this.textContent = isColorKeeped(this) ? 'Drop Color' : 'Keep Color';
+        this.previousElementSibling.style.transform = isColorKeeped(this) ? 'translateX(0px)' : 'translateX(10px)';
+        this.nextElementSibling.style.transform = isColorKeeped(this) ? 'translateX(0px)' : 'translateX(-10px)';
 
         //ajoute class fixed sur son parent (main color)
         let divfixed = this.parentNode;
