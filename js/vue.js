@@ -48,12 +48,33 @@ function changeColorAll(whereToChange, whereIsColor){
     })
 }
 
+
 //Fonction affiche rgba
 function changeRgbaText(){
     document.querySelectorAll('p').forEach(item => {
         item.textContent = item.parentNode.style.backgroundColor;
     })
 }
+
+
+// function is dark or light mode
+function isDarkmode(){
+    if(document.getElementById('toogle_b_w').textContent === 'Dark mode'){
+        return true;
+    }
+}
+
+// Button Dark / White mode
+document.getElementById('toogle_b_w').addEventListener('click', function(){
+    this.textContent = isDarkmode() ? 'Light mode' : 'Dark mode';
+
+    let main = document.getElementsByTagName('main')[0];
+    main.style.backgroundColor = isDarkmode() ? 'white' : 'black';
+
+    document.querySelectorAll('p').forEach(item => {
+        item.style.color = isDarkmode() ? 'black' : 'white';
+    })
+}) 
 
 
 // Button Switch Colors
@@ -69,14 +90,13 @@ buttonRandomColor.addEventListener('click', function(){
 document.querySelectorAll('.fix_color').forEach(item => {
     item.addEventListener('click', function(){
         //change texte du bouton + before/after
-        if (this.textContent === 'Keep Color') {
-            this.textContent = 'Drop Color';
-            this.previousElementSibling.style.transform = 'translateX(10px)';
-            this.nextElementSibling.style.transform = 'translateX(-10px)';
-        } else {
-            this.textContent = 'Keep Color';
-            this.previousElementSibling.style.transform = 'translateX(0)';
-        }
+        this.textContent =
+            this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
+        this.previousElementSibling.style.transform = 
+            this.textContent === 'Keep Color' ? 'translateX(0px)' : 'translateX(10px)';
+        this.nextElementSibling.style.transform =
+            this.textContent === 'Keep Color' ? 'translateX(0px)' : 'translateX(-10px)';
+
         //ajoute class fixed sur son parent (main color)
         let divfixed = this.parentNode;
         divfixed.classList.toggle('fixed');
