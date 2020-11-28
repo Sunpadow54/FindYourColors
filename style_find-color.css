@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+:root{
+    --font_one:'Nunito', sans-serif;
+}
+
 *{
     margin:0;
     padding:0;
@@ -5,6 +10,8 @@
     text-decoration:none;
     border:none;
     box-sizing: border-box;
+    font:1rem var(--font_one);
+
 }
 main{
     width: 100%;
@@ -15,6 +22,7 @@ main{
 }
 #random_color{
     height: 30px;
+    font-style:var(--font_one);
 }
 
 #main_color_full{
@@ -26,9 +34,25 @@ main{
     height:500px;
 }
 .main_color{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 100px 1fr;
+    grid-template-rows: 2fr 1fr;
+    grid-template-areas:
+    "before button after"
+    "rgba rgba rgba";
+    position: relative;
     justify-content: center;
-    align-items: center;
+    align-items: end;
+}
+.main_color p{
+    grid-area: rgba;
+    align-self: end;
+    justify-self: center;
+    padding:0.5rem 1rem;
+    background-color: white;
+    margin-bottom: 1rem;
+    width: 250px;
+    text-align: center;
 }
 #main_color_full:nth-child(1){
     grid-area: one;
@@ -41,34 +65,30 @@ main{
     grid-column: 3 / 4;
     grid-row: 1 / 3;
 }
-.fix_color{
-    position: relative;
+button.fix_color{
     height: 30px;
-    width: 80px;
-    border-left:5px solid;
-    border-right:5px solid;
-    border-color:white;
     background-color: white;
-    z-index: 2;
+    grid-area: button;
 }
-.fix_color::before,.fix_color::after{
+.before_button, .after_button{
     content:"";
-    display: block;
-    position: absolute;
-    top:0;
-    bottom:0;
-    width:25px;
-    border-radius: 50%;
-    border:5px solid white;
-    z-index: -1;
+    display: inline-block;
+    height:30px;
 }
-.fix_color::before{
-    left:0;
-    transform: translateX(-16px);
+.before_button{
+    background:url(../img/keep_drop-left.svg) no-repeat;
+    background-size: contain;
+    background-position: top right;
+    transform: translateX(0);
+    grid-area: before;
 }
-.fix_color::after{
-    right:0;
-    transform: translateX(16px);
+.after_button{
+    background-image:url(../img/keep_drop-right.svg);
+    background-repeat:  no-repeat;
+    background-position: bottom left;
+    background-size: contain;
+    transform: translateX(0);
+    grid-area: after;
 }
 
 #main_color_overlay{
