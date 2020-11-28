@@ -1,0 +1,40 @@
+<!DOCTYPE <html>
+    <html lang="fr">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Find Your Colors</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="style_find-color.css">
+<!--         <link rel="stylesheet" media="all and (min-width: 762px )" href="style/style.css">
+ -->
+
+        <link href="https://fonts.googleapis.com/css?family=Comfortaa:700|Muli:400,600&amp;display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin&display=swap" rel="stylesheet"> 
+    </head>
+
+    <body>
+        <main>
+            <h1>Find your Colors</h1>
+            <button id="random_color">Switch Colors</button>
+            <div id="main_color_full">
+                <div id="one" class="main_color color_one">
+                    <button class="fix_color">Keep Color</button>
+                </div>
+                <div id="two" class="main_color color_two">
+                    <button class="fix_color">Keep Color</button>
+                </div>
+                <div id="three" class="main_color color_three">
+                    <button class="fix_color">Keep Color</button>
+                </div>
+            </div>
+            <div id="main_color_overlay">
+                <div class="color_one"></div>
+                <div class="color_two"></div>
+                <div class="color_three"></div>
+            </div>
+        </main>
+        <script src="js/vue.js"></script>
+    </body>
+</html>
