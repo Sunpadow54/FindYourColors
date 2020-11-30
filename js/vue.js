@@ -20,6 +20,7 @@ mainColorOne.style.backgroundColor = randomRgba();
 mainColorTwo.style.backgroundColor = randomRgba();
 mainColorThree.style.backgroundColor = randomRgba();
 
+
 // change le reste des elements au chargement de la page
 const allColorOne = document.querySelectorAll('.color_one');
 const allColorTwo = document.querySelectorAll('.color_two');
@@ -29,24 +30,43 @@ changeColorAll(allColorOne, mainColorOne);
 changeColorAll(allColorTwo, mainColorTwo);
 changeColorAll(allColorthree, mainColorThree);
 changeRgbaText();
+changeCircleColor();
 
 
 // function change les couleurs (condition non 'fixed')
 function changeColor(mainColorBloc, otherBlocs){
     if(!mainColorBloc.classList.contains('fixed')){
+        //change Main Color block
         mainColorBloc.style.backgroundColor = randomRgba();
+        //change les autres couleurs
+        changeColorAll(otherBlocs, mainColorBloc);
+        // modifie le text rgba
+        changeRgbaText();
+        // change couleurs cercle
+        changeCircleColor();
     }
-    changeColorAll(otherBlocs, mainColorBloc);
-    changeRgbaText();
 }
 
 
 // function change la couleurs des autres blocs
-function changeColorAll(whereToChange, whereIsColor){
+function changeColorAll(whereToChange, mainColorBloc){
     whereToChange.forEach( item => {
-        item.style.backgroundColor = whereIsColor.style.backgroundColor;
+        item.style.backgroundColor = mainColorBloc.style.backgroundColor;
     })
 }
+
+
+// change couleur du cercle 
+function changeCircleColor(){
+    let circle = document.getElementById('all_color_circle');
+    circle.style.background =   'linear-gradient(217deg,' 
+                                + mainColorOne.style.backgroundColor + 
+                                ', transparent 70.71%), linear-gradient(127deg,' 
+                                + mainColorTwo.style.backgroundColor + 
+                                ', transparent 70.71%), linear-gradient(336deg,' 
+                                + mainColorThree.style.backgroundColor + ', transparent 70.71%)';
+}
+
 
 
 //Fonction affiche rgba
@@ -75,11 +95,12 @@ function isColorKeeped(buttonKeep){
 
 // Button Dark / White mode
 document.getElementById('toogle_b_w').addEventListener('click', function(){
+    //change text du bouton
     this.textContent = isDarkmode() ? 'Light mode' : 'Dark mode';
-
+    // change couleur générale
     let main = document.getElementsByTagName('main')[0];
     main.style.backgroundColor = isDarkmode() ? 'white' : 'black';
-
+    // change couleur du texte rgba
     document.querySelectorAll('p').forEach(item => {
         item.style.color = isDarkmode() ? 'black' : 'white';
     })
