@@ -80,6 +80,7 @@ buttonRandomColor.addEventListener('click', function(){
     couleurs.forEach(couleur => {
         couleur.changeColor();
         circleColor();
+        calcRgbColors();
     })
 });
 
@@ -125,4 +126,54 @@ buttonDarkMode.addEventListener('click', function(){
     document.querySelectorAll('p').forEach(item => {
         item.style.color = isDarkmode() ? 'black' : 'white';
     })
+    // recalcule les rgb
+    calcRgbColors();
 })
+
+
+
+//fonction calcul rgb, avec une couleur et une couleur de Background
+function calcRgb(bgColor, color) {
+
+    let resultR = Math.round(((1 - color.a) * bgColor.r) + (color.a * color.r));
+    let resultG = Math.round(((1 - color.a) * bgColor.g) + (color.a * color.g));
+    let resultB = Math.round(((1 - color.a) * bgColor.b) + (color.a * color.b));
+
+    let rgb = {
+        r : resultR,
+        g : resultG,
+        b : resultB
+    }
+
+    return rgb;
+}
+
+
+// reconverti les resultats r g b en string
+function convert(objet) {
+    return 'rgb(' + objet.r + ',' + objet.g + ',' + objet.b + ')';
+}
+
+
+// fonction show rgb of colors  / html
+ function showRgb(number, colorflat){
+    document.querySelector('#main_color_overlay > p:nth-of-type(' + number +'').textContent = convert(colorflat);
+}
+
+let bgColor;
+let white = { r : 255, g : 255, b : 255, a : 1 };
+let black = { r : 0, g : 0, b : 0, a : 1 };
+
+// cherche couleur rgb du background
+function backgroundgColor() {
+    bgColor = isDarkmode() ? { r : 255, g : 255, b : 255, a : 1 } : { r : 0, g : 0, b : 0, a : 1 };
+} 
+
+function calcRgbColors(){
+    backgroundgColor();
+    showRgb(1, calcRgb(bgColor, colorOne));
+    showRgb(2, calcRgb(colorOne, colorTwo));
+    showRgb(3, calcRgb(bgColor, colorTwo));
+    showRgb(4, calcRgb(colorTwo, colorThree));
+    showRgb(5, calcRgb(bgColor, colorThree));
+}
