@@ -1,29 +1,56 @@
-// random number > x
+// DOM
+const buttonRandomColor = document.getElementById('random_color');
+const buttonKeepColor = document.querySelectorAll('.fix_color');
+const buttonDarkMode = document.getElementById('toogle_b_w');
+const main = document.getElementsByTagName('main')[0];
+const circle = document.getElementById('all_color_circle');
+const textRgbAndRgba = document.querySelectorAll('p');
+let bgColor;
+
+
+// Random number > x
 let randomInt = (max) => {
     return Math.floor(Math.random() * (Math.floor(max) + 1));
 }
 
-// Contructeur de couleur
+// Color Contructor
 class Couleur {
     constructor(name) {
         this.name = name;
         this.keep = false;
-        this.r = randomInt(255);
-        this.g = randomInt(255);
-        this.b = randomInt(255);
-        this.a = Math.random().toFixed(2);
-        this.rgba = 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
-        showColor(this);
+        this.rgba = {
+            r:randomInt(255), 
+            g:randomInt(255), 
+            b:randomInt(255), 
+            a:Math.random().toFixed(2)
+        };
+        this.displayColor();
+        this.displayRgba();
+
+    }
+
+    displayColor() {
+        document.querySelectorAll('.' + this.name).forEach(div => {
+            div.style.backgroundColor = rgbaString(this.rgba);
+        })
+    }
+
+    displayRgba(){
+        document.querySelectorAll('.' + this.name + ' > p').forEach(p => {
+            p.textContent = rgbaString(this.rgba);
+        })
     }
 
     changeColor() {
         if(!this.keep) {
-            this.r = randomInt(255);
-            this.g = randomInt(255);
-            this.b = randomInt(255);
-            this.a = Math.random().toFixed(2);
-            this.rgba = 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')'; 
-            showColor(this);
+            this.rgba = {
+                r:randomInt(255), 
+                g:randomInt(255), 
+                b:randomInt(255), 
+                a:Math.random().toFixed(2)
+            };
+            this.displayColor();
+            this.displayRgba();
         }
     }
 
@@ -37,67 +64,56 @@ class Couleur {
 }
 
 
-//Création des 3 couleurs
+
+// Create 3 main Colors
 let colorOne = new Couleur('one');
 let colorTwo = new Couleur('two');
 let colorThree = new Couleur('three');
 
 
-// tableau des 3 couleurs
+
+// Array of the main colors
 let couleurs = [];
 couleurs.push(colorOne,colorTwo,colorThree);
 
 
-//fonction affiche les couleurs et les textes rgba
-function showColor(color) {
-    document.querySelectorAll('.' + color.name).forEach(div => {
-        div.style.backgroundColor = color.rgba;
-    })
-    // affiche rgba texte
-    document.querySelectorAll('.' + color.name + ' > p').forEach(p => {
-        p.textContent = color.rgba;
-    })
-}
 
-
-// fonction des couleurs du cercle 
+// Show colors Circle
 function circleColor(){
-    let circle = document.getElementById('all_color_circle');
     circle.style.background =   'linear-gradient(217deg,' 
-                                + colorOne.rgba + 
+                                + rgbaString(colorOne.rgba) + 
                                 ', transparent 70.71%), linear-gradient(127deg,' 
-                                + colorTwo.rgba + 
+                                + rgbaString(colorTwo.rgba) + 
                                 ', transparent 70.71%), linear-gradient(336deg,' 
-                                + colorThree.rgba + ', transparent 70.71%)';
+                                + rgbaString(colorThree.rgba) + ', transparent 70.71%)';
 }
-circleColor();
 
 
-// Bouton Switch Colors
-const buttonRandomColor = document.getElementById('random_color');
 
+// Button Switch Colors
 buttonRandomColor.addEventListener('click', function(){
     couleurs.forEach(couleur => {
         couleur.changeColor();
         circleColor();
-        calcRgbColors();
+        findCurrentRgb();
     })
 });
 
 
-// Bouton Keep / Drop color
-document.querySelectorAll('.fix_color').forEach(item => {
+
+// Button Keep / Drop color
+buttonKeepColor.forEach(item => {
     item.addEventListener('click', function(){
-        //change texte du bouton + before/after
+        //change button txt & padlock (span before and span after positions)
         this.textContent = this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
         this.previousElementSibling.style.transform = this.textContent === 'Keep Color' ? 'translateX(0px)' : 'translateX(10px)';
         this.nextElementSibling.style.transform = this.textContent === 'Keep Color' ? 'translateX(0px)' : 'translateX(-10px)';
         
-        //ajoute class fixed sur son parent (main color)
+        // add class fixed on parent (main color)
         let divfixed = this.parentNode;
         divfixed.classList.toggle('fixed');
 
-        // change Keep
+        // change bolean keep on the Color
         couleurs.forEach(couleur => {
             couleur.isKeeped();
         })
@@ -105,34 +121,33 @@ document.querySelectorAll('.fix_color').forEach(item => {
 })
 
 
+
 // function is dark or light mode
 function isDarkmode(){
-    if(document.getElementById('toogle_b_w').textContent === 'Dark mode'){
+    if(buttonDarkMode.textContent === 'Dark mode'){
         return true;
     }
 }
 
 
-// Button Dark / White mode
-const buttonDarkMode = document.getElementById('toogle_b_w');
 
+// Button Dark / White mode
 buttonDarkMode.addEventListener('click', function(){
-    //change texte du bouton 
+    //change button text
     this.textContent = isDarkmode() ? 'Light mode' : 'Dark mode';
-    // change couleur du main
-    let main = document.getElementsByTagName('main')[0];
+    // change color of the background
     main.style.backgroundColor = isDarkmode() ? 'white' : 'black';
-    // change couleur des textes
-    document.querySelectorAll('p').forEach(item => {
+    // change the color of texts
+    textRgbAndRgba.forEach(item => {
         item.style.color = isDarkmode() ? 'black' : 'white';
     })
-    // recalcule les rgb
-    calcRgbColors();
+    // recalculate rgb
+    findCurrentRgb();
 })
 
 
 
-//fonction calcul rgb, avec une couleur et une couleur de Background
+// Function calc rgb (need background color & color on top of it)
 function calcRgb(bgColor, color) {
 
     let resultR = Math.round(((1 - color.a) * bgColor.r) + (color.a * color.r));
@@ -144,36 +159,37 @@ function calcRgb(bgColor, color) {
         g : resultG,
         b : resultB
     }
-
     return rgb;
 }
 
 
-// reconverti les resultats r g b en string
-function convert(objet) {
-    return 'rgb(' + objet.r + ',' + objet.g + ',' + objet.b + ')';
+// Show RGB of colors  / html
+ function showRgb(indexOftext, rgb){
+    document.querySelector('#main_color_overlay > p:nth-of-type(' + indexOftext +'').textContent = rgbString(rgb);
 }
 
-
-// fonction show rgb of colors  / html
- function showRgb(number, colorflat){
-    document.querySelector('#main_color_overlay > p:nth-of-type(' + number +'').textContent = convert(colorflat);
-}
-
-let bgColor;
-let white = { r : 255, g : 255, b : 255, a : 1 };
-let black = { r : 0, g : 0, b : 0, a : 1 };
-
-// cherche couleur rgb du background
-function backgroundgColor() {
+// Seek R.G.B of the background color
+function backgroundColor() {
     bgColor = isDarkmode() ? { r : 255, g : 255, b : 255, a : 1 } : { r : 0, g : 0, b : 0, a : 1 };
 } 
 
-function calcRgbColors(){
-    backgroundgColor();
-    showRgb(1, calcRgb(bgColor, colorOne));
-    showRgb(2, calcRgb(colorOne, colorTwo));
-    showRgb(3, calcRgb(bgColor, colorTwo));
-    showRgb(4, calcRgb(colorTwo, colorThree));
-    showRgb(5, calcRgb(bgColor, colorThree));
+// converti les valeurs R G B A en string => rgba(r, g, b, a)
+function rgbaString(rgba) {
+    return 'rgb(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + rgba.a + ')';
 }
+
+// converti les valeurs R G B en string => rgb(r, g, b)
+function rgbString(rgb) {
+    return 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
+}
+
+// Calc and display RGB
+function findCurrentRgb(){
+    backgroundColor();
+    showRgb(1, calcRgb(bgColor, colorOne.rgba));
+    showRgb(2, calcRgb(colorOne.rgba, colorTwo.rgba));
+    showRgb(3, calcRgb(bgColor, colorTwo.rgba));
+    showRgb(4, calcRgb(colorTwo.rgba, colorThree.rgba));
+    showRgb(5, calcRgb(bgColor, colorThree.rgba));
+}
+findCurrentRgb();

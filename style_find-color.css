@@ -50,11 +50,10 @@ main{
     align-self: end;
     justify-self: center;
     padding:0.5rem 1rem;
-    background-color: transparent;
     margin-bottom: 1rem;
     width: 250px;
     text-align: center;
-    border:4px solid white;
+/*     border:4px solid white; */
 }
 #main_color_full:nth-child(1){
     grid-area: one;
