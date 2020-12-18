@@ -12,42 +12,49 @@
     </head>
 
     <body>
-        <main>
+        <header>
             <h1>Find your Colors</h1>
-            <button id="toogle_b_w">Dark mode</button>
-            <button id="random_color">Switch Colors</button>
-            <div id="main_color_full">
+            <div>
+                <button id="random_color">Switch Colors</button>
+                <span class="random_icon"></span>
+            </div>
+            <div>
+                <button id="toogle_b_w">Dark mode</button>
+                <span class="toogle_icon"></span>
+            </div>
+        </header>
+        <main>
+            <div id="main_colors">
                 <div class="main_color one">
                     <span class="before_button "></span>
                     <button class="fix_color">Keep Color</button>
                     <span class= "after_button"></span>
-                    <p></p>
+                    <input type="text" class="code_color">
                 </div>
                 <div class="main_color two">
                     <span class="before_button"></span>
                     <button class="fix_color">Keep Color</button>
                     <span class= "after_button"></span>
-                    <p></p>
+                    <input type="text" class="code_color">
                 </div>
                 <div class="main_color three">
                     <span class="before_button"></span>
                     <button class="fix_color">Keep Color</button>
                     <span class= "after_button"></span>
-                    <p></p>
+                    <input type="text" class="code_color">
                 </div>
             </div>
-            <div id="main_color_overlay">
+            <div id="colors_overlay">
                 <div class="one"></div>
                 <div class="two"></div>
                 <div class="three"></div>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
+                <input type="text" class="code_color" readonly>
+                <input type="text" class="code_color" readonly>
+                <input type="text" class="code_color" readonly>
+                <input type="text" class="code_color" readonly>
+                <input type="text" class="code_color" readonly>
             </div>
-            <div id="test"></div>
-            <div id="all_color_circle">
+             <div id="all_color_circle">
             </div>
         </main>
         <script src="js/vue.js"></script>
