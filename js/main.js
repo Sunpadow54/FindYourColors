@@ -58,7 +58,10 @@ const colorOne = new Couleur('one');
 const colorTwo = new Couleur('two');
 const colorThree = new Couleur('three');
 const colors = [colorOne, colorTwo, colorThree];
+
+let darkMode = false;
 findRgb();
+
 
 
 /* -------------- LISTENERS */
@@ -83,6 +86,8 @@ function changeColor() {
 
 
 // Dark / Light Modes changes
+let toogleDarkLight = () => darkMode = !darkMode;
+
 function changeBodyClass() {
     let body = document.getElementsByTagName('body')[0];
     if(body.classList.contains('light')){
@@ -93,6 +98,7 @@ function changeBodyClass() {
 }
 
 function changeMode() {
+    toogleDarkLight();
     findRgb();
     changeBodyClass();
 }
