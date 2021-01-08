@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
-:root{
+:root {
     --font_one:'Nunito', sans-serif;
+    --header: 80px;
 }
-*{
+
+* {
     margin:0;
     padding:0;
     list-style: none;
@@ -10,22 +12,196 @@
     border:none;
     box-sizing: border-box;
     font:1rem var(--font_one);
-
+    outline: none;
 }
-main{
-    background-color:white;
-    width: 100%;
-    height: 100vh;
+body { 	
+	margin: 0;
+	min-height:100vh
+}
+
+/*----------------- HEADER */
+
+header {
+    display: grid;
+    justify-content: center;
+    align-items:center;
+    grid-template-columns: 1fr 170px auto;
+    grid-template-rows: var(--header);
+    column-gap: 25px;
+    grid-template-areas:"h1 switch mode";
+    padding:0 2rem;
+}
+header > h1 {
+    align-self: center;
+    font-size: 1.5rem ;
+}
+
+/* Button Switch Color */
+
+header #random_color {
+	grid-area: switch;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	height:40px;
+    font-style:var(--font_one);
+    cursor: pointer;
+    padding: 0.5rem 0;
+    border-radius: 15px;
+}
+#random_color > i {
+	height:20px;
+	width:20px;
+	object-fit: contain;
+	margin-left: 10px;
+	background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+#random_color:active > i {
+	filter: blur(0);
+	-webkit-filter: blur(0);
+	transform: rotateZ(-180deg);
+	transition-duration: 0.3s;
+}
+
+/* Button Dark Light Mode */
+
+#toogle_light {
+	grid-area: mode;
+	position: relative;
+	justify-self: end;
+    display: block;
+    width: 60px;
+	height: 30px;
+}
+#toogle_light > input {
+    display:none;
+}
+.toogle_slider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    border-radius: 34px;
+    box-shadow:
+		-8px -4px 8px 0px #ffffff,
+		8px 4px 12px 0px #d1d9e6,
+		4px 4px 4px 0px #d1d9e6 inset,
+		-4px -4px 4px 0px #ffffff inset;
+    cursor: pointer;
+}
+.toogle_slider:before {
+    content: "";
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    border-radius: 50%;
+    background: #eef1f3;
+    background-image : url(../img/light-mode.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-size: 60%;
+    width: 28px;
+    height: 28px;
+    box-shadow:
+		-8px -4px 8px 0px #ffffff,
+		8px 4px 8px 0px #dee2e9;
+    transform: translate3d(0, 0, 0);
+}
+input:checked + .toogle_slider {
+	background-color: #141414;
+	box-shadow:
+		-8px -4px 8px 0px #1b1b1b,
+		8px 4px 12px 0px #0c0c0c,
+		4px 4px 4px 0px #0c0c0c inset,
+		-4px -4px 4px 0px #1b1b1b inset
+}
+input:checked + .toogle_slider:before {
+    transform: translateX(28px);
+    background: #242424;
+    background-image : url(../img/dark-mode.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-size: 60%;
+    box-shadow:
+		-8px -4px 8px 0px #161616,
+		8px 4px 8px 0px #0a0a0a;
+}
+
+/* --- Light Mode --- */
+
+body.light {
+	background : white;
+}
+body.light header {
+	background:linear-gradient(to right,
+		white 0%,
+		#f2f3f7 50%,
+		#f2f3f7 100%);
+}
+body.light header button {
+	background:rgb(242, 241, 245);
+	box-shadow : -2px -2px 3px #fff,
+				3px 3px 3px rgba(0,0,0,0.07);
+}
+body.light header button:active {
+	box-shadow : inset -2px -2px 5px #fff,
+				inset 3px 3px 5px rgba(0,0,0,0.07);
+}
+body.light header button > i  {
+	background-image: url(../img/switch.svg);
+}
+
+/* --- Dark Mode --- */
+
+body.dark {
+	background :black;
+}
+body.dark header {
+	background:linear-gradient(to right, 
+		black 0%,
+		#111111 80%,
+		#111111 100%);
+}
+body.dark header button {
+	background:transparent;
+	box-shadow : inset -2px -2px 3px rgba(0,0,0,0.5),
+				inset 3px 3px 3px rgba(255,255,255,0.07);
+}
+body.dark header button span {
+	color: rgb(223, 223, 223);
+	text-shadow : 0 0 5px,
+				0 0 10px #219cf3;
+}
+body.dark header button:active {
+	box-shadow : -2px -2px 3px rgba(0,0,0,0.5),
+				3px 3px 3px rgba(255,255,255,0.01);
+}
+body.dark header button > i  {
+	background-image: url(../img/switch-white.svg);
+	filter: drop-shadow(0 0.2rem 0.25rem rgba(190, 15, 15, 0.842));
+}
+body.dark #colors_overlay > .code_color,
+body.dark h1 {
+    color:white;
+}
+
+/*----------------- MAIN */
+
+main {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-}
-#random_color{
-    height: 30px;
-    font-style:var(--font_one);
+    width: 100%;
+    height:calc(100vh - var(--header));
 }
 
-#main_color_full{
+/* THE 3 COLORS */
+
+#main_colors {
     display:grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
@@ -34,10 +210,21 @@ main{
     height:500px;
     margin-bottom: 10px;
 }
-.main_color{
+#main_colors:nth-child(1) {
+    grid-area: one;
+}
+#main_colors > .two {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+}
+#main_colors > .three {
+    grid-column: 3 / 4;
+    grid-row: 1 / 3;
+}
+.main_color {
     display: grid;
     grid-template-columns: 1fr 100px 1fr;
-    grid-template-rows: 2fr 1fr;
+    grid-template-rows: 3fr 1fr;
     grid-template-areas:
     "before button after"
     "rgba rgba rgba";
@@ -45,7 +232,10 @@ main{
     justify-content: center;
     align-items: end;
 }
-.main_color p{
+
+/* MAIN COLORS RGBA */
+
+.main_color input {
     grid-area: rgba;
     align-self: end;
     justify-self: center;
@@ -53,37 +243,53 @@ main{
     margin-bottom: 1rem;
     width: 250px;
     text-align: center;
-/*     border:4px solid white; */
 }
-#main_color_full:nth-child(1){
-    grid-area: one;
+.main_color > .code_color {
+    grid-area: rgba;
+    align-self: end;
+    justify-self: center;
+    background-color: rgba(255,255,255,0.6);
+    padding:0.5rem 1rem;
+    margin-bottom: 1rem;
+    width: 220px;
+    height:40px;
+    text-align: center;
+	cursor: pointer;
 }
-#main_color_full > .two{
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
+.main_color > .code_color::selection,
+.main_color > .code_color::-moz-selection {
+    background-color: transparent;
 }
-#main_color_full > .three{
-    grid-column: 3 / 4;
-    grid-row: 1 / 3;
+
+/* Icon Copy */
+
+.copy {
+    display:none;
+    position:absolute;
+    width:43px;
+    height:58px;
 }
-button.fix_color{
+
+/* Buttons Keep */
+
+button.fix_color {
     height: 30px;
     background-color: white;
     grid-area: button;
 }
-.before_button, .after_button{
+.before_button, .after_button {
     content:"";
     display: inline-block;
     height:30px;
 }
-.before_button{
+.before_button {
     background:url(../img/keep_drop-left.svg) no-repeat;
     background-size: contain;
     background-position: top right;
     transform: translateX(0);
     grid-area: before;
 }
-.after_button{
+.after_button {
     background-image:url(../img/keep_drop-right.svg);
     background-repeat:  no-repeat;
     background-position: bottom left;
@@ -92,7 +298,18 @@ button.fix_color{
     grid-area: after;
 }
 
-#main_color_overlay{
+/* --- Color Keeped --- */
+
+.fixed .before_button {
+    transform: translateX(10px);
+}
+.fixed .after_button {
+    transform: translateX(-10px);
+}
+
+/* OVERLAYED COLORS */
+
+#colors_overlay {
     display:grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows:1fr;
@@ -100,20 +317,19 @@ button.fix_color{
     width: 100%;
     height:150px;
 }
-#main_color_overlay > div{
+#colors_overlay > div {
     grid-row: 1 / 2;
 }
-#main_color_overlay > .one{
+#colors_overlay > .one {
     grid-column: 1 / span 2;
 }
-#main_color_overlay > .two{
+#colors_overlay > .two {
     grid-column: 2 / span 3;
 }
-#main_color_overlay > .three{
+#colors_overlay > .three {
     grid-column: 4 / span 2;
 }
-
-#main_color_overlay > p {
+#colors_overlay > input {
     grid-row: 1 / 2;
     align-self: end;
     margin-bottom: 1rem;
@@ -123,51 +339,23 @@ button.fix_color{
     width: 160px;
     text-align: center;
     border:3px solid white;
+    cursor:pointer;
 }
-/* p */
-#main_color_overlay > p:nth-of-type(1){
+
+/* OVERLAYED COLORS RGB */
+
+#colors_overlay > input:nth-of-type(1) {
     grid-column: 1 / 2;
 }
-#main_color_overlay > p:nth-of-type(2){
+#colors_overlay > input:nth-of-type(2) {
     grid-column: 2 / 3;
 }
-#main_color_overlay > p:nth-of-type(3){
+#colors_overlay > input:nth-of-type(3) {
     grid-column: 3 / 4;
 }
-#main_color_overlay > p:nth-of-type(4){
+#colors_overlay > input:nth-of-type(4) {
     grid-column: 4 / 5;
 }
-#main_color_overlay > p:nth-of-type(5){
+#colors_overlay > input:nth-of-type(5) {
     grid-column: 5 / 6;
-}
-
-/* #main_color_circles{
-    display:grid;
-    grid-template-columns: repeat(5,1fr);
-    grid-template-rows: repeat(3, 1fr);
-    width: 220px;
-    height:200px;
-}
-#main_color_circles > div{
-    border-radius: 50%;
-}
-#main_color_circles > .color_one{
-    grid-column: 2 / 5 ;
-    grid-row: 1 / 3 ;
-}
-#main_color_circles > .color_two{
-    grid-column: 1 / 4 ;
-    grid-row: 2 / 4 ;
-}
-#main_color_circles > .color_three{
-    grid-column: 3 / 6 ;
-    grid-row: 2 / 4 ;
-} */
-
-#all_color_circle {
-    background-color: white;
-    border-radius: 50%;
-    width: 200px;
-    height:200px;
-    background:white;
 }

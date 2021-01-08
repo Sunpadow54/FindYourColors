@@ -11,17 +11,18 @@
  -->
     </head>
 
-    <body>
+    <body class="light">
         <header>
             <h1>Find your Colors</h1>
-            <div>
-                <button id="random_color">Switch Colors</button>
-                <span class="random_icon"></span>
-            </div>
-            <div>
-                <button id="toogle_b_w">Dark mode</button>
-                <span class="toogle_icon"></span>
-            </div>
+            <button id="random_color">
+                <span>Switch Colors</span>
+                <i></i>
+            </button>
+            <label id="toogle_light" for="checkbox">
+                <input type="checkbox" id="checkbox" autocomplete="off"/>
+                <div class="toogle_slider"></div>
+            </label>
+
         </header>
         <main>
             <div id="main_colors">
@@ -54,9 +55,9 @@
                 <input type="text" class="code_color" readonly>
                 <input type="text" class="code_color" readonly>
             </div>
-             <div id="all_color_circle">
-            </div>
+<!--              <div id="all_color_circle">
+            </div> -->
         </main>
-        <script src="js/vue.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>
