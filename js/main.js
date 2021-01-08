@@ -60,6 +60,7 @@ const colorThree = new Couleur('three');
 const colors = [colorOne, colorTwo, colorThree];
 
 let darkMode = false;
+const popupCopy = document.querySelector('.copy');
 findRgb();
 
 
@@ -70,7 +71,7 @@ findRgb();
 document.getElementById('random_color').addEventListener('click', changeColor); // Button Switch Color
 document.querySelectorAll('.fix_color').forEach(color => { color.addEventListener('click', keepColor); }) // Button Keep / Drop
 document.querySelector('#toogle_light > input').addEventListener('change', changeMode); // Button Dark / Light mode
-
+document.querySelectorAll('.code_color').forEach(codeColor => { codeColor.addEventListener('click', copy); }) // copy rgba or rgb text
 
 
 // --------------- FUNCTIONS :
@@ -146,4 +147,11 @@ function colorCodeToString(code) {
     let rgbaString = 'rgba(' + code.r + ',' + code.g + ',' + code.b + ',' + code.a + ')';
     let rgbString = 'rgb(' + code.r + ',' + code.g + ',' + code.b + ')';
     return code.a ? rgbaString : rgbString;
+}
+
+
+// copy colors codes
+function copy(){
+    this.select();
+    document.execCommand('copy');
 }
