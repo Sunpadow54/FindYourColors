@@ -60,12 +60,15 @@ const colorOne = new Couleur('one');
 const colorTwo = new Couleur('two');
 const colorThree = new Couleur('three');
 const colors = [colorOne, colorTwo, colorThree];
-
-let darkMode = false;
+const inputs = document.querySelectorAll('.rgba > input.code_color');
 const popupCopy = document.querySelector('.copy');
+let darkMode = false;
+
+
 findRgb();
-
-
+inputs.forEach( input => {
+    resizeInput(input);
+})
 
 /* -------------- LISTENERS */
 
@@ -75,7 +78,7 @@ document.querySelectorAll('.fix_color').forEach(color => { color.addEventListene
 document.querySelector('#toogle_light > input').addEventListener('change', changeMode); // Button Dark / Light mode
 /* document.querySelectorAll('.code_color').forEach(codeColor => { codeColor.addEventListener('click', copy); }) // copy to clipboard the rgba or rgb text selected
  */
-document.querySelectorAll('.code_color').forEach(inputCode => { inputCode.addEventListener('keyup', changeValue) }); // input of code color
+inputs.forEach(inputCode => { inputCode.addEventListener('keyup', changeValue) }); // input of code color
 
 
 
@@ -204,17 +207,14 @@ function changeValue(event){
         } else {
             thisColor.rgba.a = opacity;
         }
-    
     }
-    
+
     thisColor.displayColor();
     thisColor.displayRgba();
     findRgb();
+    resizeInput(this);
 }
 
-//test
-const toogleReadonlyInput = (thisColor) => {
-    if(!thisColor.keep){
-
-    }
+function resizeInput(input){
+    input.style.width = input.value.length - 2 + 'ch';
 }
