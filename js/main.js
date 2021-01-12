@@ -17,7 +17,7 @@
 */
 
 class Couleur {
-    constructor(name){
+    constructor(name) {
         this.name = name;
         this.newRGBA();
         this.keep = false;
@@ -28,7 +28,7 @@ class Couleur {
         return Math.floor(Math.random(255) * (Math.floor(255) + 1));
     }
     newRGBA() {
-        if(!this.keep){
+        if (!this.keep) {
             this.rgba = {
                 r: this.randomInt(), 
                 g: this.randomInt(), 
@@ -47,7 +47,7 @@ class Couleur {
             div.style.backgroundColor = colorCodeToString(this.rgba);
         })
     }
-    displayRgba(){
+    displayRgba() {
         document.querySelectorAll('.' + this.name + ' .code_color').forEach(textRgba => {
             /* textRgba.value = colorCodeToString(this.rgba); */
             textRgba.value = '(' + this.rgba.r + ',' + this.rgba.g + ',' + this.rgba.b + ',' + this.rgba.a + ')';
@@ -112,8 +112,16 @@ function changeMode() {
 
 // Keep / Drop color
 function keepColor() {
+    // Add 'fixed' on the Color
     this.parentNode.classList.toggle('fixed');
-    colors.forEach(color => { color.isKeeped(); } );
+    // fix the instance of Couleur
+    colors.forEach(color => { 
+        color.isKeeped();
+    } );
+    // toogle disabled attribute on the input
+    let colorName = this.parentNode.classList[1];
+    document.querySelector('.' + colorName + ' .rgba > input.code_color').toggleAttribute('disabled');
+    // Change text of button Keep
     this.textContent = this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
 }
 
@@ -202,4 +210,11 @@ function changeValue(event){
     thisColor.displayColor();
     thisColor.displayRgba();
     findRgb();
+}
+
+//test
+const toogleReadonlyInput = (thisColor) => {
+    if(!thisColor.keep){
+
+    }
 }
