@@ -59,8 +59,6 @@ header #random_color {
     background-size: contain;
 }
 #random_color:active > i {
-	filter: blur(0);
-	-webkit-filter: blur(0);
 	transform: rotateZ(-180deg);
 	transition-duration: 0.3s;
 }
@@ -183,7 +181,6 @@ body.dark header button:active {
 }
 body.dark header button > i  {
 	background-image: url(../img/switch-white.svg);
-	filter: drop-shadow(0 0.2rem 0.25rem rgba(190, 15, 15, 0.842));
 }
 body.dark #colors_overlay > .code_color,
 body.dark h1 {
@@ -245,32 +242,58 @@ main {
     align-items: center;
     margin-bottom: 1rem;
     background-color: rgba(255,255,255,0.6);
-    width: 250px;
     height:40px;
-/*     padding: 1rem 2rem; */
     overflow: hidden;
+    transition: all 0.4s;
 }
-.rgba > span {
+.rgba:hover{
+    padding-right: 35px;
+    transition: all 0.4s;
+}
+.rgba > span:first-of-type{
     text-align: right;
+    margin-left: 12px;
 }
-.rgba > .code_color {
-/*     text-align: center; */
-    width: 150px;
+.rgba > span:nth-of-type(2)::before {
+    content:"(";
+}
+.rgba > span:nth-of-type(2)::after {
+    content:")";
+    margin-right: 12px;
+}
+.rgba input.code_color {
+    text-align: center;
     background-color: transparent;
+}
+.rgba  input.code_color:hover {
+    color:initial;
+/*     background-color: rgba(132, 189, 253, 0.39); */
+    background-color: white;
+}
+.rgba  input.code_color:disabled {
+    color:initial;
 }
 .rgba > .copy {
     position: absolute;
-    right:-50px;
-    justify-self: end;
+    right: -40px;
     width: 35px;
     height: inherit;
-    transition: all 0.5s;
-    background-color:red;
+    background: center / contain no-repeat url(../img/icon-copy.svg),
+            white;
+    background-size: 70%;
+    transition: all 0.4s;
+     border-radius: 8% 0% 0% 8%;
+    box-shadow: -2px 0px 2px rgba(0,0,0,0.09);
+    cursor: pointer;
 }
 .rgba:hover .copy{
-    transition: all 0.5s;
     right: 0;
+    transition: all 0.4s;
 }
+.copy:hover {
+
+}
+
 
 /* .main_color > .code_color::selection,
 .main_color > .code_color::-moz-selection {
@@ -356,7 +379,7 @@ button.fix_color {
     justify-self: center;
     padding:0.3rem 0.5rem;
     background-color: transparent;
-    width: 160px;
+/*     width: 160px; */
     text-align: center;
     border:3px solid white;
     cursor:pointer;
