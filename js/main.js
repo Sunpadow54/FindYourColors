@@ -48,11 +48,13 @@ class Couleur {
         })
     }
     displayRgba(){
-        document.querySelectorAll('.' + this.name + ' > .code_color').forEach(textRgba => {
-            textRgba.value = colorCodeToString(this.rgba);
+        document.querySelectorAll('.' + this.name + ' .code_color').forEach(textRgba => {
+            /* textRgba.value = colorCodeToString(this.rgba); */
+            textRgba.value = '(' + this.rgba.r + ',' + this.rgba.g + ',' + this.rgba.b + ',' + this.rgba.a + ')';
         })
     }
 }
+
 
 const colorOne = new Couleur('one');
 const colorTwo = new Couleur('two');
@@ -71,7 +73,10 @@ findRgb();
 document.getElementById('random_color').addEventListener('click', changeColor); // Button Switch Color
 document.querySelectorAll('.fix_color').forEach(color => { color.addEventListener('click', keepColor); }) // Button Keep / Drop
 document.querySelector('#toogle_light > input').addEventListener('change', changeMode); // Button Dark / Light mode
-document.querySelectorAll('.code_color').forEach(codeColor => { codeColor.addEventListener('click', copy); }) // copy rgba or rgb text
+/* document.querySelectorAll('.code_color').forEach(codeColor => { codeColor.addEventListener('click', copy); }) // copy to clipboard the rgba or rgb text selected
+ */
+document.querySelectorAll('.code_color').forEach(inputCode => { inputCode.addEventListener('keyup', changeValue) }); // input of code color
+
 
 
 // --------------- FUNCTIONS :
@@ -108,7 +113,7 @@ function changeMode() {
 // Keep / Drop color
 function keepColor() {
     this.parentNode.classList.toggle('fixed');
-    colors.forEach(color => { color.isKeeped(); } )
+    colors.forEach(color => { color.isKeeped(); } );
     this.textContent = this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
 }
 
@@ -150,8 +155,51 @@ function colorCodeToString(code) {
 }
 
 
-// copy colors codes
+// Copy to Clipboad the color code
 function copy(){
     this.select();
     document.execCommand('copy');
+}
+
+
+//  Change RGBA from input
+function changeValue(event){
+    let thisColorName = this.parentNode.parentNode.classList[1];
+    let thisColor = colors[colors.findIndex(color => color.name === thisColorName)];
+    let rgbaInputs = event.target.value.slice(1, -1).split(',');
+    let rgbInputs = [rgbaInputs[0], rgbaInputs[1], rgbaInputs[2]];
+    let opacity = rgbaInputs[rgbaInputs.length - 1];
+
+    if (!thisColor.keep) {
+        if (rgbaInputs.length != 4){
+            alert('Rgba must contain 4 numbers');
+        }
+    
+        rgbaInputs.forEach( number => {
+            if (isNaN(number)) { 
+                alert('enter a valid rgba value');
+            }
+        })
+    
+        rgbInputs.forEach( number => {
+            if (number > 255){
+                alert('number must be between 0 and 255');
+            } else {
+                thisColor.rgba.r = rgbInputs[0];
+                thisColor.rgba.g = rgbInputs[1];
+                thisColor.rgba.b = rgbInputs[2];
+            }
+        })
+        
+        if (opacity > 1) {
+            alert('enter a number between 0.01 and 1');
+        } else {
+            thisColor.rgba.a = opacity;
+        }
+    
+    }
+    
+    thisColor.displayColor();
+    thisColor.displayRgba();
+    findRgb();
 }

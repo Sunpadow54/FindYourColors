@@ -235,40 +235,60 @@ main {
 
 /* MAIN COLORS RGBA */
 
-.main_color input {
+.main_color > .rgba {
+    position: relative;
     grid-area: rgba;
     align-self: end;
     justify-self: center;
-    padding:0.5rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1rem;
-    width: 250px;
-    text-align: center;
-}
-.main_color > .code_color {
-    grid-area: rgba;
-    align-self: end;
-    justify-self: center;
     background-color: rgba(255,255,255,0.6);
-    padding:0.5rem 1rem;
-    margin-bottom: 1rem;
-    width: 220px;
+    width: 250px;
     height:40px;
-    text-align: center;
-	cursor: pointer;
+/*     padding: 1rem 2rem; */
+    overflow: hidden;
 }
-.main_color > .code_color::selection,
-.main_color > .code_color::-moz-selection {
+.rgba > span {
+    text-align: right;
+}
+.rgba > .code_color {
+/*     text-align: center; */
+    width: 150px;
     background-color: transparent;
 }
+.rgba > .copy {
+    position: absolute;
+    right:-50px;
+    justify-self: end;
+    width: 35px;
+    height: inherit;
+    transition: all 0.5s;
+    background-color:red;
+}
+.rgba:hover .copy{
+    transition: all 0.5s;
+    right: 0;
+}
+
+/* .main_color > .code_color::selection,
+.main_color > .code_color::-moz-selection {
+    background-color: transparent;
+} */
 
 /* Icon Copy */
-
-.copy {
-    display:none;
+/* .copy {
+    display:block;
     position:absolute;
-    width:43px;
-    height:58px;
+    width:40px;
+    height:40px;
+    border-radius: 30%;
+    background: center / contain no-repeat url(../img/icon-copy.svg),
+                rgba(228, 228, 228, 0.6);
 }
+*/
+
 
 /* Buttons Keep */
 
@@ -296,7 +316,7 @@ button.fix_color {
     background-size: contain;
     transform: translateX(0);
     grid-area: after;
-}
+} 
 
 /* --- Color Keeped --- */
 
