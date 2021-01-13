@@ -54,23 +54,30 @@ let darkMode = false;
 
 findRgb();
 resizeInput();
+document.querySelector('#toogle_light > input').checked = false;
 
 /* -------------- LISTENERS */
 
 
 document.getElementById('random_color').addEventListener('click', changeColor); // Button Switch Color
+document.getElementById('random_color').addEventListener('mouseup', rotateIcon);
 document.querySelectorAll('.fix_color').forEach(color => { color.addEventListener('click', keepColor) }) // Button Keep / Drop
 document.querySelector('#toogle_light > input').addEventListener('change', changeMode); // Button Dark / Light mode
-
-inputs.forEach(inputCode => { inputCode.addEventListener('keyup', changeValue) }); // input of code color
-
+inputs.forEach(inputCode => { inputCode.addEventListener('keyup', changeValueRgba) }); // input of code color
 document.querySelectorAll('#colors_overlay .code_color').forEach(codeColor => { codeColor.addEventListener('click', copyToClipboard); }) // copy to clipboard the rgba or rgb text selected
-
 document.querySelectorAll('.copy').forEach(item => { item.addEventListener('click', copyToClipboard) })
+
 
 
 // --------------- FUNCTIONS :
 
+// Rotate Icon Random
+let rotationAngle = 0;
+function rotateIcon() {
+    const iconRandomColor = document.querySelector('#random_color i');
+    rotationAngle -= 180;
+    iconRandomColor.style.transform = 'rotateZ(' + rotationAngle +'deg)';
+}
 
 // Random color
 function changeColor() {
@@ -187,7 +194,7 @@ function colorCodeToString(code) {
 
 
 //  Change RGBA from input
-function changeValue(event){
+function changeValueRgba(event){
     let thisColorName = this.parentNode.parentNode.parentNode.classList[1];
     let thisColor = colors[colors.findIndex(color => color.name === thisColorName)];
     let rgbaInputs = event.target.value.split(',');
