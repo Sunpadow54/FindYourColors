@@ -185,7 +185,7 @@ body.dark header #random_color:active {
 body.dark header #random_color > i {
 	background-image: url(../img/switch-white.svg);
 }
-body.dark #colors_overlay > .code_color{
+body.dark #colors_overlay .rgb input{
     color:white;
 }
 
@@ -292,7 +292,7 @@ button.fix_color {
 .rgba input.code_color:disabled {
     color: initial;
 }
-.rgba > .copy {
+.rgba .copy {
     position: absolute;
     right: -48px; 
     filter: drop-shadow(-2px 0px 2px 
@@ -301,7 +301,7 @@ button.fix_color {
     transition: all 0.4s;
     opacity: 0.5;
 }
- .rgba > .copy i {
+ .rgba .copy i {
     display: block;
     width: 45px;
     height: 40px;
@@ -347,7 +347,9 @@ button.fix_color {
     grid-template-columns: repeat(5, 1fr);
     grid-template-areas: "one ontwo two twothree three";
 }
-#colors_overlay > div {
+#colors_overlay .one,
+#colors_overlay .two,
+#colors_overlay .three {
     grid-row: 1;
 }
 #colors_overlay > .one {
@@ -362,33 +364,71 @@ button.fix_color {
 
 /* OVERLAYED COLORS RGB */
 
-#colors_overlay > input {
-    grid-row: 1;
+#colors_overlay .rgb{
     justify-self: center;
     align-self: end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 36px;
     margin: 1rem 0.3rem;
-    padding: 0.3rem 0.5rem;
-    width: 16ch;
-    background-color: transparent;
-    text-align: center;
     border:3px solid white;
+    overflow: hidden;
     cursor: pointer;
+    transition-duration: 0.3s;
 }
-#colors_overlay > input:nth-of-type(1) {
+.rgb:hover {
+    padding-right: 24px;
+    transition: all 0.4s;
+}
+.rgb:nth-of-type(1) {
     grid-area: one;
 }
-#colors_overlay > input:nth-of-type(2) {
+.rgb:nth-of-type(2) {
     grid-area: ontwo;
 }
-#colors_overlay > input:nth-of-type(3) {
+.rgb:nth-of-type(3) {
     grid-area: two;
 }
-#colors_overlay > input:nth-of-type(4) {
+.rgb:nth-of-type(4) {
     grid-area: twothree;
 }
-#colors_overlay > input:nth-of-type(5) {
+.rgb:nth-of-type(5) {
     grid-area: three;
 }
+.rgb input {
+    text-align: center;
+    background-color: transparent;
+    cursor: pointer;
+    margin: 0 5px;
+}
+.rgb span {
+    position: absolute;
+    right: -28px;
+    display: block;
+    width: 26px;
+    height: inherit;
+    background: 51% / contain no-repeat 
+                url(../img/icon-copy.svg),
+                white;
+    background-size: 75%;
+    box-shadow:-2px 0px 3px 
+                    rgba(0,0,0,0.09);
+    transition: all 0.3s;
+    opacity: 0.8;
+}
+.rgb:hover > span{
+    right: 0;
+    transition: all 0.3s;
+}
+.rgb > span:hover{
+    opacity: 1;
+}
+
+
+/* ------- FOOTER */
+
 footer {
     height: var(--footer);
 }
@@ -426,7 +466,7 @@ footer p a {
         margin: 0;
     }
     #colors_overlay {
-        flex: 0;
+        flex: 1;
         grid-template-columns: 1fr;
         grid-template-rows: repeat(5, 1fr);
         grid-template-areas: 
@@ -437,9 +477,9 @@ footer p a {
                 "three";
         row-gap: 0;
     }
-     #colors_overlay > div {
-        grid-column: 1 / 2;
-        width: auto;
+     #colors_overlay div {
+        grid-column: 1;
+  
     }
     #colors_overlay > .one {
         grid-column: 1 / 2;
@@ -454,12 +494,13 @@ footer p a {
         grid-row: 4 / 6;
     }
 
-    #colors_overlay > input {
-        font-size: 0.9rem;
+    #colors_overlay .rgb {
         grid-column: 1 ;
-        padding: 0.3rem 0rem;
-        width: 15ch;
         margin: 1rem 0.8rem;
         border-width: 2px;
     }
+    #colors_overlay .rgb input {
+        font-size: 0.9rem;
+    }
+
 }

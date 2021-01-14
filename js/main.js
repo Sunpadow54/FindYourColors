@@ -34,7 +34,6 @@ class Couleur {
     }
     displayRgba() {
         document.querySelectorAll('.' + this.name + ' .code_color').forEach(textRgba => {
-            /* textRgba.value = colorCodeToString(this.rgba); */
             textRgba.value =  this.rgba.r + ',' + this.rgba.g + ',' + this.rgba.b + ',' + this.rgba.a ;
         })
     }
@@ -46,27 +45,27 @@ const colorOne = new Couleur('one');
 const colorTwo = new Couleur('two');
 const colorThree = new Couleur('three');
 const colors = [colorOne, colorTwo, colorThree];
-const inputs = document.querySelectorAll('.rgba input.code_color');
-const popupCopy = document.querySelector('.copy');
+
+const randomButton = document.getElementById('random_color');
+const inputs = document.querySelectorAll('.code_color');
+const modeButton = document.querySelector('#toogle_light input');
 let darkMode = false;
 
 /* settings */
 
 findRgb();
 resizeInput();
-document.querySelector('#toogle_light > input').checked = false;
+modeButton.checked = false;
 
 /* -------------- LISTENERS */
 
 
-document.getElementById('random_color').addEventListener('click', changeColor); // Button Switch Color
-document.getElementById('random_color').addEventListener('mouseup', rotateIcon);
+randomButton.addEventListener('click', changeColor); // Button Switch Color
+randomButton.addEventListener('mouseup', rotateIcon);
 document.querySelectorAll('.fix_color').forEach(color => { color.addEventListener('click', keepColor) }) // Button Keep / Drop
-document.querySelector('#toogle_light > input').addEventListener('change', changeMode); // Button Dark / Light mode
-inputs.forEach(inputCode => { inputCode.addEventListener('keyup', changeValueRgba) }); // input of code color
-document.querySelectorAll('#colors_overlay .code_color').forEach(codeColor => { codeColor.addEventListener('click', copyToClipboard); }) // copy to clipboard the rgba or rgb text selected
+modeButton.addEventListener('change', changeMode); // Button Dark / Light mode
+inputs.forEach(inputCode => { inputCode.addEventListener('keyup', changeValueRgba) }); // can change inputs of code color
 document.querySelectorAll('.copy').forEach(item => { item.addEventListener('click', copyToClipboard) })
-
 
 
 // --------------- FUNCTIONS :
@@ -148,11 +147,11 @@ function findRgb(){
     showRgb(5, calcRgb(bgColor, colorThree.rgba));
 }
 
-
 // Display txt RGB of colors
 function showRgb(indexOftext, rgb){
-    document.querySelector('#colors_overlay > input:nth-of-type(' + indexOftext +'').value = colorCodeToString(rgb);
+    document.querySelector('#colors_overlay > span:nth-of-type(' + indexOftext +') input').value = colorCodeToString(rgb);
 }
+
 
 // Convert array to string
 function colorCodeToString(code) {
@@ -161,24 +160,16 @@ function colorCodeToString(code) {
     return code.a ? rgbaString : rgbString;
 }
 
-
 // Copy to Clipboad the color code
- function copyToClipboard() {
-    let strToCopy = '';
-    /* to copy RGB */
-    if (this.tagName === 'INPUT') {
-        strToCopy = this;
-        this.select();
-        document.execCommand('copy');
-    } else {
-    /* to copy RGBA */
-        // find the rgba string we want to copy
-        let colorName = this.parentNode.parentNode.classList[1];
-        let inputSelected = document.querySelector('.' + colorName + ' .rgba > span > input');
-        strToCopy = 'rgba(' + inputSelected.value + ')';
+function copyToClipboard() {
+    let parentDiv = this.parentNode;
+    parentDiv.classList.add('tocopy');
+    let inputToCopy = document.querySelector('.tocopy input');
+    // rgba ?
+    if (parentDiv.classList.contains('rgba')) {
         // create a temporary field with value = rgba we want to copy
         const temporayInput = document.createElement('input');
-        temporayInput.value = strToCopy;
+        temporayInput.value = 'rgba(' + inputToCopy.value + ')';
         temporayInput.setAttribute('readonly', '');
         temporayInput.style.position = 'absolute';
         temporayInput.style.top = '-9999px';
@@ -187,11 +178,15 @@ function colorCodeToString(code) {
         temporayInput.select();
         document.execCommand('copy');
         // and remove it
-        document.body.removeChild(el);
+        document.body.removeChild(temporayInput);
     }
+    // rgb ?
+    if (parentDiv.classList.contains('rgb')) {
+        inputToCopy.select();
+        document.execCommand('copy');
+    }
+    this.parentNode.classList.remove('tocopy');
 }
-
-
 
 //  Change RGBA from input
 function changeValueRgba(event){
@@ -201,18 +196,15 @@ function changeValueRgba(event){
     let rgbInputs = [rgbaInputs[0], rgbaInputs[1], rgbaInputs[2]];
     let opacity = rgbaInputs[rgbaInputs.length - 1];
 
-
     if (!thisColor.keep) {
         if (rgbaInputs.length != 4){
             alert('Rgba must contain 4 numbers');
         }
-    
         rgbaInputs.forEach( number => {
             if (isNaN(number)) { 
                 alert('enter a valid rgba value');
             }
         })
-    
         rgbInputs.forEach( number => {
             if (number > 255){
                 alert('number must be between 0 and 255');
@@ -222,7 +214,6 @@ function changeValueRgba(event){
                 thisColor.rgba.b = rgbInputs[2];
             }
         })
-        
         if (opacity > 1) {
             alert('enter a number between 0.01 and 1');
         } else {
