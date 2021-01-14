@@ -1,6 +1,6 @@
-// ---- Class Color ----
-// --- the 3 Mains Colors are created using this Class 
+/* -------------- ClASS COLORS */
 
+// --- the 3 Mains Colors are created using this Class 
 class Couleur {
     constructor(name) {
         this.name = name;
@@ -25,7 +25,7 @@ class Couleur {
         }
     }
     isKeeped() {
-        this.keep = document.querySelector('.' + this.name).classList.contains('fixed') ? true : false;
+		this.keep = document.querySelector('.' + this.name).classList.contains('fixed') ? true : false;
     }
     displayColor() {
         document.querySelectorAll('.' + this.name).forEach(div => {
@@ -39,90 +39,80 @@ class Couleur {
     }
 }
 
-/* -------------- Variables */
 
+/* -------------- SETTINGS  */
+
+// Instances
 const colorOne = new Couleur('one');
 const colorTwo = new Couleur('two');
 const colorThree = new Couleur('three');
-const colors = [colorOne, colorTwo, colorThree];
 
-const randomButton = document.getElementById('random_color');
+// Variables
+const colors = [colorOne, colorTwo, colorThree];
+let darkMode = false;
+let toogleMode = () => darkMode = !darkMode;
+let rotationAngle = 0;
+
+// Selectors
+const switchColorsButton = document.getElementById('random_color');
 const inputs = document.querySelectorAll('.code_color');
 const modeButton = document.querySelector('#toogle_light input');
-let darkMode = false;
+const body = document.getElementsByTagName('body')[0];
 
-/* settings */
-
+// displays
 findRgb();
 resizeInput();
 modeButton.checked = false;
 
+
+
 /* -------------- LISTENERS */
 
-
-randomButton.addEventListener('click', changeColor); // Button Switch Color
-randomButton.addEventListener('mouseup', rotateIcon);
-document.querySelectorAll('.fix_color').forEach(color => { color.addEventListener('click', keepColor) }) // Button Keep / Drop
-modeButton.addEventListener('change', changeMode); // Button Dark / Light mode
-inputs.forEach(inputCode => { inputCode.addEventListener('keyup', changeValueRgba) }); // can change inputs of code color
-document.querySelectorAll('.copy').forEach(item => { item.addEventListener('click', copyToClipboard) })
-
-
-// --------------- FUNCTIONS :
-
-// Rotate Icon Random
-let rotationAngle = 0;
-function rotateIcon() {
-    const iconRandomColor = document.querySelector('#random_color i');
-    rotationAngle -= 180;
-    iconRandomColor.style.transform = 'rotateZ(' + rotationAngle +'deg)';
-}
-
-// Random color
-function changeColor() {
+switchColorsButton.addEventListener('click', function() {
     colors.forEach(color => {
         color.newRGBA();
     })
     findRgb();
     resizeInput();
-}
+});
 
+switchColorsButton.addEventListener('mouseup', function() {
+    rotationAngle -= 180;
+    document.querySelector('#random_color i').style.transform = 'rotateZ(' + rotationAngle +'deg)';
+});
 
-// Dark / Light Modes changes
-let toogleDarkLight = () => darkMode = !darkMode;
+document.querySelectorAll('.fix_color').forEach(color => { 
+    color.addEventListener('click', function() {
+		this.parentNode.classList.toggle('fixed');
+		// fix the instance of Couleur
+		colors.forEach(color => { 
+			color.isKeeped();
+		} );
+		this.textContent = this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
+	}) 
+})
 
-function changeBodyClass() {
-    let body = document.getElementsByTagName('body')[0];
-    if(body.classList.contains('light')){
-        body.classList.replace('light', 'dark');
-    } else {
-        body.classList.replace('dark', 'light');
-    }
-}
-
-function changeMode() {
-    toogleDarkLight();
+modeButton.addEventListener('change', function() {
+    toogleMode();
     findRgb();
     changeBodyClass();
+});
+
+inputs.forEach(inputCode => { 
+    inputCode.addEventListener('keyup', changeValueRgba) 
+});
+
+document.querySelectorAll('.copy').forEach(item => { item.addEventListener('click', copyToClipboard) })
+
+
+// --------------- FUNCTIONS :
+
+
+// Toogle body class (light / dark)
+function changeBodyClass() {
+    body.classList.toggle('light');
+    body.classList.toggle('dark');
 }
-
-
-// Keep / Drop color
-function keepColor() {
-    // Add 'fixed' on the Color
-    this.parentNode.classList.toggle('fixed');
-    // fix the instance of Couleur
-    colors.forEach(color => { 
-        color.isKeeped();
-    } );
-    // toogle disabled attribute on the input
-    let colorName = this.parentNode.classList[1];
-    document.querySelector('.' + colorName + ' .rgba .code_color').toggleAttribute('disabled');
-    // Change text of button Keep
-    this.textContent = this.textContent === 'Keep Color' ? 'Drop Color' : 'Keep Color';
-    
-}
-
 
 // Calculate a rgb (need background color & color on top of it)
 function calcRgb(bgColor, color) {
@@ -140,18 +130,17 @@ function calcRgb(bgColor, color) {
 // Calculate and display RGB of the colors
 function findRgb(){
     let bgColor =  darkMode ? { r : 0, g : 0, b : 0, a : 1 } : { r : 255, g : 255, b : 255, a : 1 }; 
-    showRgb(1, calcRgb(bgColor, colorOne.rgba));
-    showRgb(2, calcRgb(colorOne.rgba, colorTwo.rgba));
-    showRgb(3, calcRgb(bgColor, colorTwo.rgba));
-    showRgb(4, calcRgb(colorTwo.rgba, colorThree.rgba));
-    showRgb(5, calcRgb(bgColor, colorThree.rgba));
+    displayRgb(1, calcRgb(bgColor, colorOne.rgba));
+    displayRgb(2, calcRgb(colorOne.rgba, colorTwo.rgba));
+    displayRgb(3, calcRgb(bgColor, colorTwo.rgba));
+    displayRgb(4, calcRgb(colorTwo.rgba, colorThree.rgba));
+    displayRgb(5, calcRgb(bgColor, colorThree.rgba));
 }
 
 // Display txt RGB of colors
-function showRgb(indexOftext, rgb){
+function displayRgb(indexOftext, rgb){
     document.querySelector('#colors_overlay > span:nth-of-type(' + indexOftext +') input').value = colorCodeToString(rgb);
 }
-
 
 // Convert array to string
 function colorCodeToString(code) {
@@ -196,37 +185,34 @@ function changeValueRgba(event){
     let rgbInputs = [rgbaInputs[0], rgbaInputs[1], rgbaInputs[2]];
     let opacity = rgbaInputs[rgbaInputs.length - 1];
 
-    if (!thisColor.keep) {
-        if (rgbaInputs.length != 4){
-            alert('Rgba must contain 4 numbers');
-        }
-        rgbaInputs.forEach( number => {
-            if (isNaN(number)) { 
-                alert('enter a valid rgba value');
-            }
-        })
-        rgbInputs.forEach( number => {
-            if (number > 255){
-                alert('number must be between 0 and 255');
-            } else {
-                thisColor.rgba.r = rgbInputs[0];
-                thisColor.rgba.g = rgbInputs[1];
-                thisColor.rgba.b = rgbInputs[2];
-            }
-        })
-        if (opacity > 1) {
-            alert('enter a number between 0.01 and 1');
-        } else {
-            thisColor.rgba.a = opacity;
-        }
-    }
+	if (rgbaInputs.length != 4){
+		alert('Rgba must contain 4 numbers');
+	}
+	rgbaInputs.forEach( number => {
+		if (isNaN(number)) { 
+			alert('enter a valid rgba value');
+		}
+	})
+	rgbInputs.forEach( number => {
+		if (number > 255){
+			alert('number must be between 0 and 255');
+		} else {
+			thisColor.rgba.r = rgbInputs[0];
+			thisColor.rgba.g = rgbInputs[1];
+			thisColor.rgba.b = rgbInputs[2];
+		}
+	})
+	if (opacity > 1) {
+		alert('enter a number between 0.01 and 1');
+	} else {
+		thisColor.rgba.a = opacity;
+	}
 
     thisColor.displayColor();
     thisColor.displayRgba();
     findRgb();
     resizeInput();
 }
-
 
 // change width of inputs
 function resizeInput(){
