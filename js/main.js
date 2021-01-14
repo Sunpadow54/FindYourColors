@@ -15,7 +15,7 @@ class Couleur {
     newRGBA() {
         if (!this.keep) {
             this.rgba = {
-                r: this.randomInt(), 
+                r: this.randomInt(),
                 g: this.randomInt(), 
                 b: this.randomInt(), 
                 a:Math.random().toFixed(2)
@@ -139,7 +139,7 @@ function findRgb(){
 
 // Display txt RGB of colors
 function displayRgb(indexOftext, rgb){
-    document.querySelector('#colors_overlay > span:nth-of-type(' + indexOftext +') input').value = colorCodeToString(rgb);
+    document.querySelector('#colors_overlay > p:nth-of-type(' + indexOftext +') input').value = colorCodeToString(rgb);
 }
 
 // Convert array to string
