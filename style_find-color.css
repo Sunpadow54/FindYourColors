@@ -249,11 +249,14 @@ button.fix_color {
     background-size: contain;
     transform: translateX(0);
     grid-area: after;
-} 
+}
+.fixed input {
+    pointer-events: none;
+}
 
 /* MAIN COLORS RGBA text */
 
-.main_color > .rgba {
+.rgba {
     grid-area: rgba;
     position: relative;
     align-self: end;
@@ -292,7 +295,7 @@ button.fix_color {
 .rgba input.code_color:disabled {
     color: initial;
 }
-.rgba .copy {
+.copy {
     position: absolute;
     right: -48px; 
     filter: drop-shadow(-2px 0px 2px 
@@ -301,7 +304,7 @@ button.fix_color {
     transition: all 0.4s;
     opacity: 0.5;
 }
- .rgba .copy i {
+.copy > i {
     display: block;
     width: 45px;
     height: 40px;
@@ -322,10 +325,10 @@ button.fix_color {
     right: 0;
     transition: all 0.4s;
 }
-.rgba > .copy:hover {
+.copy:hover {
     opacity: 1;
 }
-.rgba > .copy:active > i {
+.copy:active > i {
     background-size: 40%;
     transition: all 0.2s;
 }
@@ -403,7 +406,7 @@ button.fix_color {
     cursor: pointer;
     margin: 0 5px;
 }
-.rgb span {
+.rgb > span {
     position: absolute;
     right: -28px;
     display: block;
