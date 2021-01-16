@@ -37,7 +37,20 @@ class Couleur {
             textRgba.value =  this.rgba.r + ',' + this.rgba.g + ',' + this.rgba.b + ',' + this.rgba.a ;
         })
     }
+    inputRgba(rgba, rgb, opacity) {
+        if(isValidInput(rgba, rgb, opacity)) {
+            this.rgba.r = rgb[0];
+            this.rgba.g = rgb[1];
+            this.rgba.b = rgb[2];
+            this.rgba.a = opacity;
+            this.displayColor();
+            findRgb();
+            resizeInput();
+        }
+    }
 }
+
+
 
 
 /* -------------- SETTINGS  */
@@ -66,17 +79,18 @@ modeButton.checked = false;
 
 
 
+
 /* -------------- LISTENERS */
 
-switchColorsButton.addEventListener('click', function() {
-    colors.forEach(color => {
-        color.newRGBA();
-    })
-    findRgb();
-    resizeInput();
+switchColorsButton.addEventListener('click', () => {
+        colors.forEach(color => {
+            color.newRGBA();
+        })
+        findRgb();
+        resizeInput();
 });
 
-switchColorsButton.addEventListener('mouseup', function() {
+switchColorsButton.addEventListener('mouseup', () => {
     rotationAngle -= 180;
     document.querySelector('#random_color i').style.transform = 'rotateZ(' + rotationAngle +'deg)';
 });
@@ -92,17 +106,28 @@ document.querySelectorAll('.fix_color').forEach(color => {
 	}) 
 })
 
-modeButton.addEventListener('change', function() {
+modeButton.addEventListener('change', () => {
     toogleMode();
     findRgb();
     changeBodyClass();
 });
 
 inputs.forEach(inputCode => { 
-    inputCode.addEventListener('keyup', changeValueRgba) 
+    inputCode.addEventListener('input', function(event){
+        // search the color Object related to the input
+        let colorDivRelated = this.parentNode.parentNode.parentNode.classList[1];
+        let colorObject = colors[colors.findIndex(color => color.name === colorDivRelated)];
+        // search the r, g, b, and a of the input
+        let rgbaArr = event.target.value.split(',');
+        let rgbArr = rgbaArr.slice(0, 4);
+        let opacity = rgbaArr[rgbaArr.length - 1];
+        colorObject.inputRgba(rgbaArr, rgbArr, opacity);
+    }) 
 });
 
 document.querySelectorAll('.copy').forEach(item => { item.addEventListener('click', copyToClipboard) })
+
+
 
 
 // --------------- FUNCTIONS :
@@ -113,6 +138,7 @@ function changeBodyClass() {
     body.classList.toggle('light');
     body.classList.toggle('dark');
 }
+
 
 // Calculate a rgb (need background color & color on top of it)
 function calcRgb(bgColor, color) {
@@ -127,6 +153,7 @@ function calcRgb(bgColor, color) {
     return rgb;
 }
 
+
 // Calculate and display RGB of the colors
 function findRgb(){
     let bgColor =  darkMode ? { r : 0, g : 0, b : 0, a : 1 } : { r : 255, g : 255, b : 255, a : 1 }; 
@@ -137,10 +164,12 @@ function findRgb(){
     displayRgb(5, calcRgb(bgColor, colorThree.rgba));
 }
 
+
 // Display txt RGB of colors
 function displayRgb(indexOftext, rgb){
     document.querySelector('#colors_overlay > p:nth-of-type(' + indexOftext +') input').value = colorCodeToString(rgb);
 }
+
 
 // Convert array to string
 function colorCodeToString(code) {
@@ -149,6 +178,7 @@ function colorCodeToString(code) {
     return code.a ? rgbaString : rgbString;
 }
 
+
 // Copy to Clipboad the color code
 function copyToClipboard() {
     let parentDiv = this.parentNode;
@@ -156,7 +186,7 @@ function copyToClipboard() {
     let inputToCopy = document.querySelector('.tocopy input');
     // rgba ?
     if (parentDiv.classList.contains('rgba')) {
-        // create a temporary field with value = rgba we want to copy
+        // create a temporary field to copy a string with 'rgb(' + value + ')'
         const temporayInput = document.createElement('input');
         temporayInput.value = 'rgba(' + inputToCopy.value + ')';
         temporayInput.setAttribute('readonly', '');
@@ -177,42 +207,28 @@ function copyToClipboard() {
     this.parentNode.classList.remove('tocopy');
 }
 
-//  Change RGBA from input
-function changeValueRgba(event){
-    let thisColorName = this.parentNode.parentNode.parentNode.classList[1];
-    let thisColor = colors[colors.findIndex(color => color.name === thisColorName)];
-    let rgbaInputs = event.target.value.split(',');
-    let rgbInputs = [rgbaInputs[0], rgbaInputs[1], rgbaInputs[2]];
-    let opacity = rgbaInputs[rgbaInputs.length - 1];
 
-	if (rgbaInputs.length != 4){
-		alert('Rgba must contain 4 numbers');
-	}
-	rgbaInputs.forEach( number => {
-		if (isNaN(number)) { 
-			alert('enter a valid rgba value');
-		}
-	})
-	rgbInputs.forEach( number => {
-		if (number > 255){
-			alert('number must be between 0 and 255');
-		} else {
-			thisColor.rgba.r = rgbInputs[0];
-			thisColor.rgba.g = rgbInputs[1];
-			thisColor.rgba.b = rgbInputs[2];
-		}
-	})
-	if (opacity > 1) {
-		alert('enter a number between 0.01 and 1');
-	} else {
-		thisColor.rgba.a = opacity;
-	}
-
-    thisColor.displayColor();
-    thisColor.displayRgba();
-    findRgb();
-    resizeInput();
+// Verify if the input rgba is correct
+ function isValidInput(rgba, rgb, opacity) {
+     if (rgba.length !== 4) {
+        alert('Rgba must contain 4 numbers');
+        return false;
+    }
+    if(rgba.some(value => isNaN(value))) {
+        alert('enter a valid rgba value');
+        return false;
+    }
+    if(rgb.some(value => value > 255)) {
+        alert('number must be between 0 and 255');
+        return false;
+    }
+    if (opacity > 1) {
+        alert('enter a number between 0.01 and 1');
+        return false;
+    }
+    return true;
 }
+
 
 // change width of inputs
 function resizeInput(){
