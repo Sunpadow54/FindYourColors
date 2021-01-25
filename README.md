@@ -32,7 +32,7 @@ I made a lot of trials to test diffents way of progamming, thus the git history 
 
 ### Made with
 
-Html / Css / Javscript (vanilla)
+Html / Css / Javscript
 
 * VSCode
 
