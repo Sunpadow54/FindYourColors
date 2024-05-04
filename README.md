@@ -37,9 +37,9 @@ Html / Css / Javscript
 * VSCode
 
 ### Auteur
-Sunpadown / elsa dessarps
 
-_https://www.sunpadown.fr/_
+Sunpadown
+
 
 ### License
 
